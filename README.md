@@ -95,3 +95,8 @@ To run all tests
 
 `./tools/do test`
 
+## Modif IRISIB
+
+To make the Node run on sniffer, binary mode by default, file `src/cfg.c` is modified :
+- Line 140 : replace `MODE_ANCHOR` with `MODE_SNIFFER`
+- Line 326 : set `binaryMode` as `true`
