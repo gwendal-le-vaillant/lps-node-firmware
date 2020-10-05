@@ -1,5 +1,5 @@
 OPENOCD           ?= openocd
-OPENOCD_INTERFACE ?= interface/stlink-v2.cfg
+OPENOCD_INTERFACE ?= interface/stlink-v2-1.cfg
 REV               ?= B
 PYTHON2           ?= python2
 # CFLAGS          += -fdiagnostics-color=auto
@@ -14,6 +14,7 @@ HAL_ROOT=hal/stm32f0xx
 CPU=f0
 PROCESSOR=-mthumb -mcpu=cortex-m0 -DHSI48_VALUE="((uint32_t)48000000)" -DSTM32F072xB
 OPENOCD_TARGET    ?= target/stm32f0x_stlink.cfg
+#OPENOCD_TARGET    ?= target/stm32f0x.cfg
 else
 $(error Rev.$(REV) unknown)
 endif
