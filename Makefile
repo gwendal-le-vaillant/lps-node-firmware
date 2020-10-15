@@ -4,6 +4,8 @@ REV               ?= B
 PYTHON2           ?= python2
 # CFLAGS          += -fdiagnostics-color=auto
 CFLAGS += -DUSE_FTDI_UART
+#CFLAGS += -SNIFFER_MODE
+CFLAGS += -TDOA3_ANCHOR_MODE
 
 BOOTLOAD          ?= 0
 
