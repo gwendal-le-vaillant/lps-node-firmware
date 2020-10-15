@@ -103,20 +103,6 @@ static void main_task(void *pvParameters) {
   }
   printf("\r\n");
 
-  // Initializing pressure sensor (if present ...)
-  lps25hInit(&hi2c1);
-  testSupportPrintStart("Initializing pressure sensor");
-  if (lps25hTestConnection()) {
-    printf("[OK]\r\n");
-    lps25hSetEnabled(true);
-  } else {
-    printf("[FAIL] (%u)\r\n", (unsigned int)hi2c1.ErrorCode);
-    selftestPasses = false;
-  }
-
-  testSupportPrintStart("Pressure sensor self-test");
-  testSupportReport(&selftestPasses, lps25hSelfTest());
-
   // Initializing i2c eeprom
   eepromInit(&hi2c1);
   testSupportPrintStart("EEPROM self-test");
@@ -138,6 +124,8 @@ static void main_task(void *pvParameters) {
     printf("TEST\t: One or more self-tests failed, blocking startup!\r\n");
     usbcommSetSystemStarted(true);
   }
+
+  changeMode(MODE_SNIFFER); //ADDED to be sure that node is now running in sniffer mode
 
   // Printing UWB configuration
   struct uwbConfig_s * uwbConfig = uwbGetConfig();

@@ -138,7 +138,7 @@ static bool write_defaults(void) {
   // Write the default address
   cfgWriteU8(cfgAddress, 0);
   cfgWriteU8(cfgMode, MODE_SNIFFER);		//Modified to MODE_SNIFFER
-  cfgWriteU8list(cfgAnchorlist, default_anchor_list, sizeof(default_anchor_list));
+  //cfgWriteU8list(cfgAnchorlist, default_anchor_list, sizeof(default_anchor_list));
   write_crc();
   if (!eepromWrite(0, buffer, 7))
     return false;
