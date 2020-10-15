@@ -38,6 +38,7 @@
 #include "led.h"
 #include "button.h"
 
+#include "lpp.h"
 #include "cfg.h"
 #include "eeprom.h"
 
@@ -125,10 +126,37 @@ static void main_task(void *pvParameters) {
     usbcommSetSystemStarted(true);
   }
 
-  changeMode(MODE_SNIFFER); //ADDED to be sure that node is now running in sniffer mode
+  // ADDED
+
+  //changeMode(MODE_SNIFFER); //ADDED to be sure that node is now running in sniffer mode
+
+  changeMode(MODE_ANCHOR);					//Set node as anchor
+  cfgWriteU8(cfgMode, MODE_TDOA_ANCHOR3);	//set node as TDOA3 anchor
+  changeAddress(8);							//Set anchor ID
+
+  //struct lppShortAnchorPosition_s* newpos = (struct lppShortAnchorPosition_s*)&data[1];	//struct contains an array of 3 floats
+
+  float position[3];
+  float xPosition = 1.23456;
+  float yPosition = 2.34567;
+  float zPosition = 0.12345;
+  position[0] = xPosition;
+  position[1] = yPosition;
+  position[2] = zPosition;
+
+   cfgWriteFP32list(cfgAnchorPos, position, 3);
+   struct uwbConfig_s * uwbConfig = uwbGetConfig();
+   uwbConfig->position[0] = position[0];
+   uwbConfig->position[1] = position[1];
+   uwbConfig->position[2] = position[2];
+   uwbConfig->positionEnabled = true;
+
+
+
+   // END OF ADDED
 
   // Printing UWB configuration
-  struct uwbConfig_s * uwbConfig = uwbGetConfig();
+  //struct uwbConfig_s * uwbConfig = uwbGetConfig();
   printf("CONFIG\t: Address is 0x%X\r\n", uwbConfig->address[0]);
   printf("CONFIG\t: Mode is %s\r\n", uwbAlgorithmName(uwbConfig->mode));
   printf("CONFIG\t: Tag mode anchor list (%i): ", uwbConfig->anchorListSize);
