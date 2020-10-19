@@ -3,9 +3,8 @@ OPENOCD_INTERFACE ?= interface/stlink-v2-1.cfg
 REV               ?= B
 PYTHON2           ?= python2
 # CFLAGS          += -fdiagnostics-color=auto
-CFLAGS += -DUSE_FTDI_UART
-#CFLAGS += -SNIFFER_MODE
-CFLAGS += -TDOA3_ANCHOR_MODE
+#CFLAGS += -DUSE_FTDI_UART
+#CFLAGS += -DSNIFFER		#To make a node sniffer firmware instead of a TDOA3 anchor firmware
 
 BOOTLOAD          ?= 0
 

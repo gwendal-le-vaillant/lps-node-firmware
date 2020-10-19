@@ -126,10 +126,15 @@ static void main_task(void *pvParameters) {
     usbcommSetSystemStarted(true);
   }
 
-  // ADDED
 
-  //changeMode(MODE_SNIFFER); //ADDED to be sure that node is now running in sniffer mode
+  struct uwbConfig_s * uwbConfig = uwbGetConfig();
 
+//Next part is added to be able to select between sniffer mode and TDOA3 anchor mode
+
+#ifdef SNIFFER
+  changeMode(MODE_SNIFFER); //ADDED to be sure that node is now running in sniffer mode
+
+#else
   changeMode(MODE_ANCHOR);					//Set node as anchor
   cfgWriteU8(cfgMode, MODE_TDOA_ANCHOR3);	//set node as TDOA3 anchor
   changeAddress(8);							//Set anchor ID
@@ -137,22 +142,20 @@ static void main_task(void *pvParameters) {
   //struct lppShortAnchorPosition_s* newpos = (struct lppShortAnchorPosition_s*)&data[1];	//struct contains an array of 3 floats
 
   float position[3];
-  float xPosition = 1.23456;
-  float yPosition = 2.34567;
-  float zPosition = 0.12345;
+  float xPosition = 1.23456f;
+  float yPosition = 2.34567f;
+  float zPosition = 0.12345f;
   position[0] = xPosition;
   position[1] = yPosition;
   position[2] = zPosition;
 
-   cfgWriteFP32list(cfgAnchorPos, position, 3);
-   struct uwbConfig_s * uwbConfig = uwbGetConfig();
-   uwbConfig->position[0] = position[0];
-   uwbConfig->position[1] = position[1];
-   uwbConfig->position[2] = position[2];
-   uwbConfig->positionEnabled = true;
+  cfgWriteFP32list(cfgAnchorPos, position, 3);
 
-
-
+  uwbConfig->position[0] = position[0];
+  uwbConfig->position[1] = position[1];
+  uwbConfig->position[2] = position[2];
+  uwbConfig->positionEnabled = true;
+#endif
    // END OF ADDED
 
   // Printing UWB configuration
