@@ -97,6 +97,31 @@ To run all tests
 
 ## Modif IRISIB
 
-To make the Node run on sniffer, binary mode by default, file `src/cfg.c` is modified :
-- Line 140 : replace `MODE_ANCHOR` with `MODE_SNIFFER`
-- Line 326 : set `binaryMode` as `true`
+Le makefile a été modifié pour pouvoir choisir si l'on veut compiler un firmware de typer ancre ou un firmware de type tag.
+- Si la ligne 6 est décommentée, le STM enverra des données vers le port UART (indiqué FTDI sur les nodes Bitcraze, relié sur le port UART du RPI sur le shield). Il faut donc la décommenter pour recevoir les infos de sniffing du shield.
+- Si la ligne 7 est décommentée, le firmware sera compilée en mode sniffer. Sinon, il sera compilée en mode ancre TDoA3
+
+Le fichier main.cpp a donc été modifié pour effectuer l'une ou l'autre configuration. Voir ligne 134 jusqu'à 141.
+
+En particulier, pour régler l'adresse d'une ancre, il faut modifier la ligne 140 et donc recompiler le firmware avant de vouloir flasher ladite ancre, car l'ID ne sera plus modifiable. Ou alors simplement enlever cette ligne, afin de pouvoir régler l'ID comme on règle la postion de l'ancre.
+
+
+## Comment mettre à jour le firmware des ancres et des tags
+
+Avant de flasher, une fois le code modifiée, il faut le recompiler. Pour cela, exécuter les commandes `make clean` puis `make`.
+
+### Ancres maison
+
+Pour mettre à jour le firmware des ancres maison, il faut utiliser le mode DFU. Pour faire démarrer les ancres en mode DFU, il faut enfoncer le bouton du PCB avant de le brancher en USB.
+
+pour mettre à jour le firmware, il faut lancer la commande `make dfu`.
+
+### Shield Tag
+
+Pour mettre à jour le tag du shield RPI, il faut le flasher via SWD. Pour cela, il faut utiliser un ST-LINK v2.1 (par exemple celui d'un nucleo) et un adapteur de ce type : https://www.bitcraze.io/products/debug-adapter-kit/, en utuilisant le cable JST à 6 contacts.
+
+une fois l'ordinateur relié au shield via le ST-LINK et l'adapteur, lancer la commande `make flash`.
+
+### Nodes Bitcraze
+
+Pour les nodes Bitcraze, les deux méthodes sont utilisables. Le flash via SWD a l'avantage d'être beaucoup plus rapide, et de ne pas nécessiter de redémarrer le STM pour qu'il démarre en mode DFU.
